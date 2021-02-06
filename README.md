@@ -7,3 +7,8 @@ Recriando o jogo da Vida de Conway em Python (Recreating the Conway's Game Of Li
 • Visual Studio Code
 
 • Tkinter
+
+## Comandos
+
+Botão direito do mouse → Desativa Celula
+Botão esquerdo do mouse → Ativa Celula
