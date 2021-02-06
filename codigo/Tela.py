@@ -1,5 +1,5 @@
 from tkinter import *
-from Tile import Tile
+from Celula import Celula
 
 # A classe responsável pela criação da Tela
 class Tela():
@@ -10,21 +10,22 @@ class Tela():
         font = ('Small Fonts', 30, 'bold')
 
         # Obtém a resolução informada e transforma em valores úteis
-        res_x, res_y = resolucao.split('x')
-        res_x = int(res_x); res_y = int(res_y)
+        self.res_x, self.res_y = resolucao.split('x')
+        self.res_x = int(self.res_x); self.res_y = int(self.res_y)
 
         # ------------------------------------------------
         # -- CANVAS --
         # O canvas usado
         self.canvas = Canvas(self.inst, background='black', highlightthickness=0
-        , width=res_x, height=res_y-80)
+        , width=self.res_x, height=self.res_y-80)
         
-        # Cria os Tiles
-        self.Tiles = []
+        # Cria as celulas na Tela
+        self.Celulas = []
+        self.tamanho = 20
 
-        for x in range(0, res_x, 20):
-            for y in range(0, res_y-80, 20):
-                self.Tiles.append(Tile(((x, y), (x+20, y+20)), self.canvas, self.inst))
+        for x in range(0, self.res_x, self.tamanho):
+            for y in range(0, self.res_y-80, self.tamanho):
+                self.Celulas.append(Celula(((x, y), (x+self.tamanho, y+self.tamanho)), self.canvas))
 
         # -------------------
         # -- BOTÃO -- 
