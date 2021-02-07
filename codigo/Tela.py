@@ -10,30 +10,45 @@ class Tela():
         font = ('Small Fonts', 30, 'bold')
 
         # Obtém a resolução informada e transforma em valores úteis
-        self.res_x, self.res_y = resolucao.split('x')
-        self.res_x = int(self.res_x); self.res_y = int(self.res_y)
+        res_x, res_y = resolucao.split('x')
+        res_x = int(res_x); res_y = int(res_y)
 
         # ------------------------------------------------
         # -- CANVAS --
         # O canvas usado
         self.canvas = Canvas(self.inst, background='black', highlightthickness=0
-        , width=self.res_x, height=self.res_y-80)
+        , width=res_x, height=res_y-80)
         
         # Cria as celulas na Tela
         self.Celulas = []
-        self.tamanho = 20
+        tamanho = 20
 
-        for x in range(0, self.res_x, self.tamanho):
-            for y in range(0, self.res_y-80, self.tamanho):
-                self.Celulas.append(Celula(((x, y), (x+self.tamanho, y+self.tamanho)), self.canvas))
+        '''
+        for x in range(0, res_x, tamanho):
+            for y in range(0, res_y-80, tamanho):
+                self.Celulas.append(Celula(((x, y), (x+tamanho, y+tamanho)), self.canvas))'''
+
+        for y in range(0, res_y-80, tamanho):
+            aux = []
+            for x in range(0, res_x, tamanho):
+                aux.append(Celula(((x, y), (x+tamanho, y+tamanho)), self.canvas))
+            
+            self.Celulas.append(aux)
 
         # -------------------
         # -- BOTÃO -- 
-        self.but = Button(self.inst, bg='darkgray', fg='white', text='Sair',
-         command=exit, highlightthickness=0, relief='flat', width=100, font=font)
+        framebut = Frame(self.inst, bg='darkgray')
+        
+        but = Button(framebut, bg='darkgray', fg='white', text='SAIR',
+         command=exit, highlightthickness=0, relief='flat', width=20, font=font)
+        self.butjogo = Button(framebut, bg='darkgray', fg='white', text='INICIAR',
+         command=exit, highlightthickness=0, relief='flat', width=20, font=font)
 
         # ------------------------------------------------
         
         # Empacota
         self.canvas.pack()
-        self.but.pack()
+
+        framebut.pack()
+        but.pack(side=RIGHT)
+        self.butjogo.pack(side=RIGHT)
