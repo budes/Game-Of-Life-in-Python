@@ -8,6 +8,9 @@ class Jogo(Tela):
         # Inicia o objeto Tela
         Tela.__init__(self, resolucao)
         
+        # Variável que determina o funcionamento 
+        self.edicao = True
+
         # Armazena a copia das instancias
         self.copia = []
 
@@ -38,44 +41,58 @@ class Jogo(Tela):
         coord = (event.x, event.y)
         elemento = self.canvas.find_overlapping(coord[0], coord[1], coord[0], coord[1])
 
-        #print(coord)
-
-        print(ative)
         if len(elemento) >= 1:
             if (elemento[0] in self.copia) or len(self.copia) == 0:
                 self.copia.append(elemento[0])
-                for i in range(len(self.Celulas)):
+                '''for i in range(len(self.Celulas)):
                     if self.Celulas[i].celula == elemento[0]:
                         self.Celulas[i].Gerencia(ative)
-                        break
-                    
+                        break'''
+
+                for setor in self.Celulas:
+                    for celulas in setor:
+                        if celulas.celula == elemento[0]:
+                            celulas.Gerencia(ative)
+                            break
+ 
     def Update(self):
         # -- Faz as atualizações na tela -- 
-        for elemento in self.copia:
-            for celulas in self.Celulas:
-                if celulas.celula == elemento:
-                    if celulas.state:
-                        celulas.Ativa()
-                    else:
-                        celulas.Desativa()
-                    
-                    self.copia.remove(elemento)
-                    break
-        
+        for elemento in self.copia: # Pega os elementos colocados para atualizar e os atualiza
+            for setor in self.Celulas:
+                for celulas in setor:
+                    if celulas.celula == elemento:
+                        if celulas.state:
+                            celulas.Ativa()
+                        else:
+                            celulas.Desativa()
+                        
+                        self.copia.remove(elemento)
+                        break
+                        
         self.inst.after(10, self.Update)
 
-    def ChecaVida(self):
-        indices = []
-        
-        for celula in self.Celulas:
-            if celula.state == True:
-                indices.append(self.Celulas.index(celula))
-        
-        quant_x = self.res_x//self.tamanho
-        quant_y = self.res_y//self.tamanho
+    def IniciaSimulação(self):
+        self.edicao = False
+    def ParaSimulacao(self):
+        self.edicao = True
 
-        for i in indices:
-            ...    
+    def ChecaVida(self):
+
+        for i_setor in range(len(self.Celulas)):
+            setor = self.Celulas[i_setor]
+            for i_celulas in range(len(setor)):
+                celula = setor[i_celulas]
+                if celula.state == True:
+                    vivas = 0
+                    for y in range(-1, 2): # Coloquei 2 pq o range diminui 1 valor
+                        for x in range(-1, 2):
+                            if self.Celulas[y][x].state == True and (x, y) != (0, 0):
+                                vivas += 1   
+                    
+                    if vivas < 2 or vivas > 3:
+                        celula.Gerencia()
+
+        
             
     
 
