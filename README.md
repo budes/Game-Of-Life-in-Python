@@ -4,7 +4,7 @@ Recriando o jogo da Vida de Conway em Python (Recreating the Conway's Game Of Li
 ## Tecnologias Usadas
 • Python 3.8.3 - 3.9.1 ([Link](https://www.python.org/))
 
-• Visual Studio Code
+• Visual Studio Code ([Link](https://code.visualstudio.com/))
 
 • Tkinter
 
