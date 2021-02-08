@@ -13,3 +13,10 @@ Recriando o jogo da Vida de Conway em Python (Recreating the Conway's Game Of Li
 Botão direito do mouse → Desativa Celula
 
 Botão esquerdo do mouse → Ativa Celula
+
+# Modos de Jogo
+
+## Edição
+
+Você pode editar tudo no game, criar formatos estranhos a sua vontade e a simulação não vai interferir
+
