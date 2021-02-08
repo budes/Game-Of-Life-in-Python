@@ -42,7 +42,7 @@ class Tela():
         but = Button(framebut, bg='darkgray', fg='white', text='SAIR',
          command=exit, highlightthickness=0, relief='flat', width=20, font=font)
         self.butjogo = Button(framebut, bg='darkgray', fg='white', text='INICIAR',
-         command=exit, highlightthickness=0, relief='flat', width=20, font=font)
+         highlightthickness=0, relief='flat', width=20, font=font)
 
         # ------------------------------------------------
         

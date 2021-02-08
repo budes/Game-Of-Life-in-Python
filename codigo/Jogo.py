@@ -8,8 +8,13 @@ class Jogo(Tela):
         # Inicia o objeto Tela
         Tela.__init__(self, resolucao)
         
+        # Define um comando pro botão do objeto Tela
+        self.butjogo['command'] = self.IniciaSimulação
+        self.butjogo['bg'] = 'red'
+
         # Variável que determina o funcionamento 
         self.edicao = True
+        self.atualizacao = 100
 
         # Armazena a copia das instancias
         self.copia = []
@@ -17,17 +22,17 @@ class Jogo(Tela):
         # -- Os bingings -- 
 
         # Botão esquerdo do mouse (LMB)
-        self.inst.bind('<Button-1>', self.BotaoEsquerdo)
-        self.inst.bind('<B1-Motion>', self.BotaoEsquerdo)
+        self.canvas.bind('<Button-1>', self.BotaoEsquerdo)
+        self.canvas.bind('<B1-Motion>', self.BotaoEsquerdo)
         # Botão direito do mouse (RMB)
-        self.inst.bind('<Button-3>', self.BotaoDireito)
-        self.inst.bind('<B3-Motion>', self.BotaoDireito)
+        self.canvas.bind('<Button-3>', self.BotaoDireito)
+        self.canvas.bind('<B3-Motion>', self.BotaoDireito)
 
         # Inicia a Updatar a Tela
         self.Update()
 
         # Essa instancia usada vem do objeto Tela
-        self.inst.focus_force()
+        self.canvas.focus_force()
         self.inst.mainloop()
     
     # O que diferencia o comando do RMB do comando do LMB
@@ -56,7 +61,9 @@ class Jogo(Tela):
                             break
  
     def Update(self):
-        # -- Faz as atualizações na tela -- 
+        # -- Faz as atualizações na tela --
+        atualiza = 10
+
         for elemento in self.copia: # Pega os elementos colocados para atualizar e os atualiza
             for setor in self.Celulas:
                 for celulas in setor:
@@ -68,33 +75,64 @@ class Jogo(Tela):
                         
                         self.copia.remove(elemento)
                         break
-                        
-        self.inst.after(10, self.Update)
+                            
+        if self.edicao == False:
+            atualiza = self.atualizacao
+            self.ChecaVida()
+
+        self.inst.after(atualiza, self.Update)
+
 
     def IniciaSimulação(self):
+        # -- Prepara para inicializar a simulação --
+        self.MudaCor('yellow') 
+
         self.edicao = False
+
+        self.butjogo['bg'] = 'lime'
+        self.butjogo['text'] = 'PARAR'
+        self.butjogo['command'] = self.ParaSimulacao
+
+
     def ParaSimulacao(self):
+        self.MudaCor('white')
+
         self.edicao = True
 
-    def ChecaVida(self):
+        self.butjogo['bg'] = 'red'
+        self.butjogo['text'] = 'INICIAR'
+        self.butjogo['command'] = self.IniciaSimulação
 
+    def MudaCor(self, cor):
+        for setor in self.Celulas:
+            for celula in setor:
+                celula.ativada = cor
+
+                if celula.state == True:
+                    celula.Ativa()
+
+    def ChecaVida(self):
         for i_setor in range(len(self.Celulas)):
             setor = self.Celulas[i_setor]
             for i_celulas in range(len(setor)):
                 celula = setor[i_celulas]
-                if celula.state == True:
-                    vivas = 0
-                    for y in range(-1, 2): # Coloquei 2 pq o range diminui 1 valor
-                        for x in range(-1, 2):
-                            if self.Celulas[y][x].state == True and (x, y) != (0, 0):
-                                vivas += 1   
-                    
-                    if vivas < 2 or vivas > 3:
-                        celula.Gerencia()
+                
+                vivas = 0
+                for y in range(-1, 2): # Coloquei 2 pq o range diminui 1 valor
+                    for x in range(-1, 2):
+                        try:
+                            if self.Celulas[i_setor+y][i_celulas+x].state == True and (x, y) != (0, 0):
+                                vivas += 1 
+                        except: pass
+                
+                if (vivas < 2 or vivas > 3) and celula.state == True:
+                    celula.Gerencia(False)
+                    self.copia.append(celula.celula)
 
-        
-            
-    
+                if vivas == 3 and celula.state == False:
+                    celula.Gerencia(True)
+                    self.copia.append(celula.celula)
+
 
 # Inicia o game
 resolucao = '1020x760'
